@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterController : MonoBehaviour
-{
-
+{ 
     public float speed = 10.0f;
     private float translation;
     private float straffe;
@@ -13,7 +12,9 @@ public class CharacterController : MonoBehaviour
     void Start()
     {
         // turn off the cursor
-        Cursor.lockState = CursorLockMode.Locked;
+        // Cursor.lockState = CursorLockMode.Locked;
+
+        Cursor.visible = true;
     }
 
     // Update is called once per frame

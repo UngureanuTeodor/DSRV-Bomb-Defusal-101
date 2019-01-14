@@ -50,12 +50,15 @@ public class BombScript : MonoBehaviour
                     transform.Translate(Vector3.up, Space.World);
                     PressToFocusText.gameObject.SetActive(false);
 
+                    transform.position += new Vector3(1.0f, -0.25f, 0.0f);
                 }
                 else
                 {
                     targetRotation *= Quaternion.AngleAxis(-60, Vector3.left);
                     transform.Translate(-Vector3.up, Space.World);
                     PressToFocusText.gameObject.SetActive(true);
+
+                    transform.position -= new Vector3(1.0f, -0.25f, 0.0f);
                 }
 
                 isRotated = !isRotated;

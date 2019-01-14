@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - keypad1
+  - keypad2
+  - keypad3
+  - keypad0
   layers:
   - Default
   - TransparentFX
