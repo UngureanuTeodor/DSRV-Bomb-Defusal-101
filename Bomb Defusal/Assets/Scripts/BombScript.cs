@@ -7,6 +7,8 @@ public class BombScript : MonoBehaviour
 {
     public float smooth = 1f;
     private Quaternion targetRotation;
+    private int noOfBatteries = 3;
+
     void Start()
     {
         targetRotation = transform.rotation;
@@ -40,8 +42,8 @@ public class BombScript : MonoBehaviour
 
     void Update()
     {
-        if (crossedBoundary == true)
-        {
+        //if (crossedBoundary == true)
+        //{
             if (Input.GetKeyDown(KeyCode.F))
             {
                 if (!isRotated)
@@ -65,6 +67,11 @@ public class BombScript : MonoBehaviour
             }
 
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, 10 * smooth * Time.deltaTime);
-        }
+        //}
+    }
+
+    public int getNoOfBatteries()
+    {
+        return noOfBatteries;
     }
 }

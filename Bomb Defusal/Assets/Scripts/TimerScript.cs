@@ -15,11 +15,18 @@ public class TimerScript : MonoBehaviour {
 	void Update () {
         elapsedTime -= Time.deltaTime;
 
-        int minutes = (int)elapsedTime / 60;
-        int seconds = (int)elapsedTime % 60;
-        string minutesText = (minutes < 10 ? "0" : "") + minutes.ToString();
-        string secondsText = (seconds < 10 ? "0" : "") + seconds.ToString();
+        if (elapsedTime <= 0)
+        {
+            GameManager.LoseGame("BOOM! No time left!");
+        }
+        else
+        {
+            int minutes = (int)elapsedTime / 60;
+            int seconds = (int)elapsedTime % 60;
+            string minutesText = (minutes < 10 ? "0" : "") + minutes.ToString();
+            string secondsText = (seconds < 10 ? "0" : "") + seconds.ToString();
 
-        textMesh.text = minutesText + ":" + secondsText;
+            textMesh.text = minutesText + ":" + secondsText;
+        }
 	}
 }
