@@ -17,7 +17,7 @@ public class TimerScript : MonoBehaviour {
 
         if (elapsedTime <= 0)
         {
-            GameManager.LoseGame("BOOM! No time left!");
+            GameManager.Get().LoseGame("BOOM! No time left!");
         }
         else
         {

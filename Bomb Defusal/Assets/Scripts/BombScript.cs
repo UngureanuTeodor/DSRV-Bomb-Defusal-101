@@ -7,7 +7,7 @@ public class BombScript : MonoBehaviour
 {
     public float smooth = 1f;
     private Quaternion targetRotation;
-    private int noOfBatteries = 3;
+    private int noOfBatteries = 4;
 
     void Start()
     {
@@ -20,25 +20,25 @@ public class BombScript : MonoBehaviour
 
     public TextMesh PressToFocusText;
 
-    void OnTriggerEnter(Collider other)
-    {
-        // Telling game to activate boolean
-        if (other.gameObject.tag == "Player")
-        {
-            PressToFocusText.gameObject.SetActive(true);
-            crossedBoundary = true;
-        }
-    }
+    //void OnTriggerEnter(Collider other)
+    //{
+    //    // Telling game to activate boolean
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        PressToFocusText.gameObject.SetActive(true);
+    //        crossedBoundary = true;
+    //    }
+    //}
 
-    void OnTriggerExit(Collider other)
-    {
-        // Telling game to activate boolean
-        if (other.gameObject.tag == "Player")
-        {
-            PressToFocusText.gameObject.SetActive(false);
-            crossedBoundary = false;
-        }
-    }
+    //void OnTriggerExit(Collider other)
+    //{
+    //    // Telling game to activate boolean
+    //    if (other.gameObject.tag == "Player")
+    //    {
+    //        PressToFocusText.gameObject.SetActive(false);
+    //        crossedBoundary = false;
+    //    }
+    //}
 
     void Update()
     {

@@ -7,8 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour {
 
     private static GameManager instance;
-    private static int strikesLeft = 3;
-    private static bool alive = true;
+    private int strikesLeft = 3;
+    private bool alive = true;
     public GameObject bomb, serialPlaceholder;
 
     public static GameManager Get()
@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour {
         }
 	}
 
-    public static void LoseGame(string message)
+    public void LoseGame(string message)
     {
         GameObject messageUI = GameObject.Find("Message");
         messageUI.GetComponent<Text>().text = message;
