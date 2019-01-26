@@ -325,14 +325,11 @@ public class Keypads : MonoBehaviour {
     public static int GetIndexModule_3() { return index_module_se; }
 
     public static void PopFromOrder(int index) {
-        if (order.Count > 1)
+        for (int i = 0; i < order.Count; i++)
         {
-            for (int i = 0; i < order.Count; i++)
+            if (order[i] == index)
             {
-                if (order[i] == index)
-                {
-                    order.RemoveAt(i);
-                }
+                order.RemoveAt(i);
             }
         }
     }

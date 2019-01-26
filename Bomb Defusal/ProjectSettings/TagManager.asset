@@ -8,6 +8,13 @@ TagManager:
   - keypad2
   - keypad3
   - keypad0
+  - Button
+  - button_0
+  - button_1
+  - button_2
+  - button_3
+  - button_4
+  - button_5
   layers:
   - Default
   - TransparentFX

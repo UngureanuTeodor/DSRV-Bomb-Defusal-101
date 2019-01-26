@@ -1,8 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class WhosOnFirst : MonoBehaviour {
+
+    public TextMesh button_0;
+    public TextMesh button_1;
+    public TextMesh button_2;
+    public TextMesh button_3;
+    public TextMesh button_4;
+    public TextMesh button_5;
+    public TextMesh screen;
+
+    string dictionaryTitle;
+    public static int solvedModule_buttonIndex;
+    public static bool gameSolved = false;
 
     List<WOF_Screen> screens = new List<WOF_Screen>();
     List<WOF_Button> buttons = new List<WOF_Button>();
@@ -584,25 +597,154 @@ public class WhosOnFirst : MonoBehaviour {
 
     void GenerateRandomScreen()
     {
-        // (1,6)
         int randomColumn = Random.Range(0, screens.Count);
         // Iau textul si il afisez in interfata
+        screen.text = screens[randomColumn].GetName();
+
+        // Tin minte pozitia pe care ma uit ca sa stiu care buton ma afecteaza
+        switch (screens[randomColumn].GetPosition()) {
+            case 0: {
+                    dictionaryTitle = button_0.text;
+                    break;
+
+                }
+            case 1:
+                {
+                    dictionaryTitle = button_1.text;
+                    break;
+
+                }
+            case 2:
+                {
+                    dictionaryTitle = button_2.text;
+                    break;
+
+                }
+            case 3:
+                {
+                    dictionaryTitle = button_3.text;
+                    break;
+
+                }
+            case 4:
+                {
+                    dictionaryTitle = button_4.text;
+                    break;
+
+                }
+            case 5:
+                {
+                    dictionaryTitle = button_5.text;
+                    break;
+
+                }
+        }
     }
 
     void GenerateRandomButtons() {
+        List<int> buttonsKeys = new List<int>();
 
-        int randomColumn = Random.Range(0, buttons.Count);
+        for (int i = 0; i < buttons.Count; i++) {
+            buttonsKeys.Add(i);
+        }
+
+        int randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_0.text = buttons[randomColumn].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+
+        randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_1.text = buttons[buttonsKeys[randomColumn]].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+
+        randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_2.text = buttons[buttonsKeys[randomColumn]].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+
+        randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_3.text = buttons[buttonsKeys[randomColumn]].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+
+        randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_4.text = buttons[buttonsKeys[randomColumn]].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+
+        randomColumn = Random.Range(0, buttonsKeys.Count);
+        // Iau textul si il afisez in interfata
+        button_5.text = buttons[buttonsKeys[randomColumn]].GetName();
+        buttonsKeys.RemoveAt(randomColumn);
+    }
+
+    void GetCorrectWord() {
+        string button_0_text = button_0.text;
+        string button_1_text = button_1.text;
+        string button_2_text = button_2.text;
+        string button_3_text = button_3.text;
+        string button_4_text = button_4.text;
+        string button_5_text = button_5.text;
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            if (buttons[i].GetName() == dictionaryTitle) {
+                for (int j = 0; j < buttons[i].GetDictionary().Count; j++) {
+                    if (buttons[i].GetDictionary()[j] == button_0_text)
+                    {
+                        solvedModule_buttonIndex = 0;
+                        return;
+                    }
+                    else if (buttons[i].GetDictionary()[j] == button_1_text)
+                    {
+                        solvedModule_buttonIndex = 1;
+                        return;
+                    }
+                    else if (buttons[i].GetDictionary()[j] == button_2_text)
+                    {
+                        solvedModule_buttonIndex = 2;
+                        return;
+                    }
+                    else if (buttons[i].GetDictionary()[j] == button_3_text)
+                    {
+                        solvedModule_buttonIndex = 3;
+                        return;
+                    }
+                    else if (buttons[i].GetDictionary()[j] == button_4_text)
+                    {
+                        solvedModule_buttonIndex = 4;
+                        return;
+                    }
+                    else if (buttons[i].GetDictionary()[j] == button_5_text)
+                    {
+                        solvedModule_buttonIndex = 5;
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     // Use this for initialization
     void Start () {
         Init();
-        GenerateRandomScreen();
         GenerateRandomButtons();
-	}
+        GenerateRandomScreen();
+        GetCorrectWord();
+
+        Debug.Log(solvedModule_buttonIndex);
+
+        button_0.GetComponent<Button>().onClick.AddListener(TaskOnClick);
+    }
+
+    void TaskOnClick()
+    {
+        //Output this to console when Button1 or Button3 is clicked
+        Debug.Log("You have clicked the button!");
+    }
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 }

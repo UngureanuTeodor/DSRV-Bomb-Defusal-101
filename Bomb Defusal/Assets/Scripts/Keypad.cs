@@ -7,6 +7,7 @@ public class Keypad : MonoBehaviour {
     public Material status_idle;
     public Material status_success;
     public Material status_error;
+    public GameObject keypad_solved;
 
     bool clickedOk = false;
 
@@ -54,11 +55,18 @@ public class Keypad : MonoBehaviour {
                     Keypads.PopFromOrder(index_module);
 
                     clickedOk = true;
+
+                    if (Keypads.order.Count == 0)
+                    {
+                        keypad_solved.GetComponent<Renderer>().material = status_success;
+                    }
                 }
                 else
                 {
                     GameObject child = transform.GetChild(0).gameObject;
                     child.GetComponent<Renderer>().material = status_error;
+                    
+                    GameManager.Get().strike();
                 }
             }
 
