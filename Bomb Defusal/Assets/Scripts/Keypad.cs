@@ -1,8 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class Keypad : MonoBehaviour {
+public class Keypad : InteractibleElementScript
+{
 
     public Material status_idle;
     public Material status_success;
@@ -11,65 +13,79 @@ public class Keypad : MonoBehaviour {
 
     bool clickedOk = false;
 
+    private Renderer rend;
+
     // Use this for initialization
     void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        rend = GetComponent<Renderer>();
     }
 
-    void OnMouseOver()
+    public override void highlightObject()
     {
-        if (Input.GetMouseButtonDown(0))
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Add(outlineMaskMaterial);
+        materials.Add(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void unhighlightObject()
+    {
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Remove(outlineMaskMaterial);
+        materials.Remove(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void interactWithElement()
+    {
+        if (!clickedOk)
         {
-            if (!clickedOk)
+            int index_module = -1;
+
+            if (transform.gameObject.tag == "keypad0")
             {
-                int index_module = -1;
-
-                if (transform.gameObject.tag == "keypad0")
-                {
-                    index_module = Keypads.GetIndexModule_0();
-                }
-                else if (transform.gameObject.tag == "keypad1")
-                {
-                    index_module = Keypads.GetIndexModule_1();
-                }
-                else if (transform.gameObject.tag == "keypad2")
-                {
-                    index_module = Keypads.GetIndexModule_2();
-                }
-                else if (transform.gameObject.tag == "keypad3")
-                {
-                    index_module = Keypads.GetIndexModule_3();
-                }
-
-                Debug.Log(index_module + " - " + Keypads.GetMinList());
-
-                // Verificam daca e OK
-                if (index_module == Keypads.GetMinList())
-                {
-                    GameObject child = transform.GetChild(0).gameObject;
-                    child.GetComponent<Renderer>().material = status_success;
-                    Keypads.PopFromOrder(index_module);
-
-                    clickedOk = true;
-
-                    if (Keypads.order.Count == 0)
-                    {
-                        keypad_solved.GetComponent<Renderer>().material = status_success;
-                    }
-                }
-                else
-                {
-                    GameObject child = transform.GetChild(0).gameObject;
-                    child.GetComponent<Renderer>().material = status_error;
-                    
-                    GameManager.Get().strike();
-                }
+                index_module = Keypads.GetIndexModule_0();
+            }
+            else if (transform.gameObject.tag == "keypad1")
+            {
+                index_module = Keypads.GetIndexModule_1();
+            }
+            else if (transform.gameObject.tag == "keypad2")
+            {
+                index_module = Keypads.GetIndexModule_2();
+            }
+            else if (transform.gameObject.tag == "keypad3")
+            {
+                index_module = Keypads.GetIndexModule_3();
             }
 
+            Debug.Log(index_module + " - " + Keypads.GetMinList());
+
+            // Verificam daca e OK
+            if (index_module == Keypads.GetMinList())
+            {
+                GameObject child = transform.GetChild(0).gameObject;
+                child.GetComponent<Renderer>().material = status_success;
+                Keypads.PopFromOrder(index_module);
+
+                clickedOk = true;
+
+                if (Keypads.order.Count == 0)
+                {
+                    keypad_solved.GetComponent<Renderer>().material = status_success;
+                }
+            }
+            else
+            {
+                GameObject child = transform.GetChild(0).gameObject;
+                child.GetComponent<Renderer>().material = status_error;
+
+                GameManager.Get().strike();
+            }
         }
     }
 }

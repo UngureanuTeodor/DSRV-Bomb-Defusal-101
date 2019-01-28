@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour {
     private int strikesLeft = 3;
     private bool alive = true;
     public GameObject bomb, serialPlaceholder;
+    public GameObject controllerLeft, controllerRight;
+    private int bombSelectedByController = -1;
 
     public static GameManager Get()
     {
@@ -83,5 +85,26 @@ public class GameManager : MonoBehaviour {
         GameObject strikesUI = GameObject.Find("Strikes");
         string existingText = strikesUI.GetComponent<Text>().text;
         strikesUI.GetComponent<Text>().text = existingText + "  X";
+    }
+
+    public void selectBomb(int controllerIndex)
+    {
+        bombSelectedByController = controllerIndex;
+        bomb.GetComponent<BoxCollider>().enabled = false;
+        if(controllerIndex == 0)
+        {
+            controllerRight.GetComponent<ControllerTriggerAction>().setHasLaser(true);
+        } else
+        {
+            controllerLeft.GetComponent<ControllerTriggerAction>().setHasLaser(true);
+        }
+    }
+
+    public void deselectBomb()
+    {
+        bombSelectedByController = -1;
+        bomb.GetComponent<BoxCollider>().enabled = true;
+        controllerRight.GetComponent<ControllerTriggerAction>().setHasLaser(false);
+        controllerLeft.GetComponent<ControllerTriggerAction>().setHasLaser(false);
     }
 }

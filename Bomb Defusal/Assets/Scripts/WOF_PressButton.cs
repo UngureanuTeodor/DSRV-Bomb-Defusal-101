@@ -1,39 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class WOF_PressButton : MonoBehaviour {
+public class WOF_PressButton : InteractibleElementScript
+{
 
     public Material status_success;
     public GameObject whosOnFirst_solved;
+    private Renderer rend;
 
     // Use this for initialization
     void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-    void OnMouseOver()
+        rend = gameObject.transform.parent.GetComponent<Renderer>();
+    }
+
+    public override void highlightObject()
+    {
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Add(outlineMaskMaterial);
+        materials.Add(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void unhighlightObject()
+    {
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Remove(outlineMaskMaterial);
+        materials.Remove(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void interactWithElement()
     {
         if (!WhosOnFirst.gameSolved)
         {
-            if (Input.GetMouseButtonDown(0))
+            //if (Input.GetMouseButtonDown(0))
+            //{
+            if (transform.gameObject.tag == ("button_" + WhosOnFirst.solvedModule_buttonIndex))
             {
-                if (transform.gameObject.tag == ("button_" + WhosOnFirst.solvedModule_buttonIndex))
-                {
-                    whosOnFirst_solved.GetComponent<Renderer>().material = status_success;
-                    Debug.Log("Done");
-                    WhosOnFirst.gameSolved = true;
-                }
-                else
-                {
-                    Debug.Log("Wrong");
-                    GameManager.Get().strike();
-                }
+                whosOnFirst_solved.GetComponent<Renderer>().material = status_success;
+                Debug.Log("Done");
+                WhosOnFirst.gameSolved = true;
             }
+            else
+            {
+                Debug.Log("Wrong");
+                GameManager.Get().strike();
+            }
+            //}
         }
     }
 }

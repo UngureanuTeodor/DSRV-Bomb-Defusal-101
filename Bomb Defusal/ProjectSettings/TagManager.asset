@@ -4,17 +4,24 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - keypad1
-  - keypad2
-  - keypad3
-  - keypad0
+  - Bomb
+  - button
   - Button
-  - button_0
-  - button_1
   - button_2
+  - keypad0
+  - button_5
   - button_3
   - button_4
-  - button_5
+  - button_0
+  - keypad1
+  - keypad3
+  - keypad2
+  - button_1
+  - Code1
+  - Code2
+  - Code4
+  - ScreenModule
+  - Code3
   layers:
   - Default
   - TransparentFX
@@ -24,7 +31,7 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
+  - Module
   - 
   - 
   - 

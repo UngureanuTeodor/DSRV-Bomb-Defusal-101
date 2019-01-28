@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class ChessButtonScript : MonoBehaviour {
+public class ChessButtonScript : InteractibleElementScript {
 
     private GameObject parent;
     private Renderer rend;
@@ -13,16 +14,32 @@ public class ChessButtonScript : MonoBehaviour {
         rend = GetComponent<Renderer>();
 
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-    void OnMouseDown()
+    public override void highlightObject()
+    {
+        //Debug.Log("Here");
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Add(outlineMaskMaterial);
+        materials.Add(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void unhighlightObject()
+    {
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Remove(outlineMaskMaterial);
+        materials.Remove(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void interactWithElement()
     {
         bool result = parent.GetComponent<ChessModuleScript>().OnButtonClicked(gameObject.transform.name);
-        if(result)
+        if (result)
         {
             rend.material.shader = Shader.Find("_Color");
             rend.material.SetColor("_Color", Color.green);
