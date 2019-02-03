@@ -2,13 +2,16 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using System;
+using System.Linq;
+
 public enum FlipMode
 {
     RightToLeft,
     LeftToRight
 }
-[ExecuteInEditMode]
-public class Book : MonoBehaviour {
+
+public class Book : InteractibleElementScript {
     public Canvas canvas;
     [SerializeField]
     RectTransform BookPanel;
@@ -62,6 +65,11 @@ public class Book : MonoBehaviour {
     bool pageDragging = false;
     //current flip mode
     FlipMode mode;
+    private Renderer rend;
+    public GameObject leftPoint, rightPoint;
+
+    public string selectedPage = "RightNext";
+    public AudioSource bookFlipAudioSource;
 
     void Start()
     {
@@ -260,6 +268,7 @@ public class Book : MonoBehaviour {
         LeftNext.transform.SetAsFirstSibling();
         if (enableShadowEffect) Shadow.gameObject.SetActive(true);
         UpdateBookRTLToPoint(f);
+        pageDragging = false;
     }
     public void OnMouseDragRightPage()
     {
@@ -294,6 +303,7 @@ public class Book : MonoBehaviour {
         RightNext.transform.SetAsFirstSibling();
         if (enableShadowEffect) ShadowLTR.gameObject.SetActive(true);
         UpdateBookLTRToPoint(f);
+        pageDragging = false;
     }
     public void OnMouseDragLeftPage()
     {
@@ -402,5 +412,53 @@ public class Book : MonoBehaviour {
         }
         if (onFinish != null)
             onFinish();
+    }
+
+    public override void highlightObject()
+    {
+        rend =  GameObject.Find(selectedPage).GetComponent<Renderer>();
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Add(outlineMaskMaterial);
+        materials.Add(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void unhighlightObject()
+    {
+        rend = GameObject.Find(selectedPage).GetComponent<Renderer>();
+        var materials = rend.sharedMaterials.ToList();
+
+        materials.Remove(outlineMaskMaterial);
+        materials.Remove(outlineFillMaterial);
+
+        rend.materials = materials.ToArray();
+    }
+
+    public override void interactWithElement()
+    {
+        bookFlipAudioSource.Play();
+        Debug.Log("Page: " + currentPage);
+        switch(selectedPage)
+        {
+            case "LeftNext":
+                if (currentPage >= 2)
+                {
+                    currentPage -= 2;
+                    LeftNext.sprite = (currentPage > 0) ? bookPages[currentPage - 1] : background;
+                    RightNext.sprite = bookPages[currentPage];
+                    
+                }
+                break;
+            case "RightNext":
+                if (currentPage <= bookPages.Count() - 2)
+                {
+                    currentPage += 2;
+                    LeftNext.sprite = bookPages[currentPage - 1];
+                    RightNext.sprite = (currentPage < bookPages.Count()) ? bookPages[currentPage] : background;
+                }
+                break;
+        }
     }
 }

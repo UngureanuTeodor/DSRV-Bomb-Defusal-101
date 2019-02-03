@@ -1,11 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WireBox : MonoBehaviour {
+public class WireBox : MonoBehaviour
+{
 
     // Use this for initialization
-    public string serialNo;
+    private string _serialNo;
     private Dictionary<string, int> _apperances { get; set; }
 
     private bool _wiresDeactivated { get; set; }
@@ -14,15 +16,20 @@ public class WireBox : MonoBehaviour {
     private GameObject[] _wires;
     private int _wireToBeCut;
     private string[] sortedWires;
-	void Start () {
+
+    public GameObject wires_solved;
+    public Material status_success;
+
+    void Start () {
         _wiresDeactivated = false;
         _apperances = new Dictionary<string, int>();
         _wires = GameObject.FindGameObjectsWithTag("Wire");
         message = new WireMessage(0, string.Empty, false);
         sortedWires = new string[_wires.Length];
+        string serialNo = GameManager.Get().getSerial();
 
-        
-        for(var i = 0; i < _wires.Length; i++)
+
+        for (var i = 0; i < _wires.Length; i++)
         {
             WireObj val = _wires[i].GetComponentInChildren<WireObj>();
             string color = _wires[i].ToString().Replace("Wire", string.Empty).Replace(" (UnityEngine.GameObject)", string.Empty);
@@ -51,15 +58,19 @@ public class WireBox : MonoBehaviour {
             {
                 if (message.wirePosition == _wireToBeCut) { 
                     _wiresDeactivated = true;
+                    wires_solved.GetComponent<Renderer>().material = status_success;
+                    GameManager.Get().finishedModule();
                 }
                 else
                 {
-                    Debug.Log("BOOM");
+                    //Debug.Log("BOOM");
+                    GameManager.Get().strike();
                 }
             }
             else
             {
-                Debug.Log("BOOM");
+                //Debug.Log("BOOM");
+                GameManager.Get().strike();
             }
         }
 	}
@@ -99,7 +110,7 @@ public class WireBox : MonoBehaviour {
 
     private int ComputeFourWires()
     {
-        if(_apperances.ContainsKey("Red") && _apperances["Red"] > 1 && int.Parse(serialNo[serialNo.Length - 1].ToString()) % 2 != 0){
+        if(_apperances.ContainsKey("Red") && _apperances["Red"] > 1 && int.Parse(_serialNo[_serialNo.Length - 1].ToString()) % 2 != 0){
             return GetLastOfColor("Red");
         }
         else if(string.Equals(sortedWires[3], "Yellow") && !_apperances.ContainsKey("Red"))

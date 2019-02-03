@@ -14,6 +14,8 @@ public class Keypad : InteractibleElementScript
     bool clickedOk = false;
 
     private Renderer rend;
+    public AudioSource highlightButtonAudioSource;
+    public AudioSource pressButtonAudioSource;
 
     // Use this for initialization
     void Start () {
@@ -28,6 +30,7 @@ public class Keypad : InteractibleElementScript
         materials.Add(outlineFillMaterial);
 
         rend.materials = materials.ToArray();
+        highlightButtonAudioSource.Play();
     }
 
     public override void unhighlightObject()
@@ -42,6 +45,7 @@ public class Keypad : InteractibleElementScript
 
     public override void interactWithElement()
     {
+        pressButtonAudioSource.Play();
         if (!clickedOk)
         {
             int index_module = -1;
@@ -77,6 +81,7 @@ public class Keypad : InteractibleElementScript
                 if (Keypads.order.Count == 0)
                 {
                     keypad_solved.GetComponent<Renderer>().material = status_success;
+                    GameManager.Get().finishedModule();
                 }
             }
             else

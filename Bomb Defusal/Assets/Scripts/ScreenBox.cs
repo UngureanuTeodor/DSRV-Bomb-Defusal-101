@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class ScreenBox : MonoBehaviour {
@@ -20,33 +22,37 @@ public class ScreenBox : MonoBehaviour {
 
     private int[] _valueByOrder;
     private Dictionary<int, PressedButton> _steps { get; set; }
-	// Use this for initialization
-	void Start () {
+
+    public GameObject screen_solved;
+    public Material status_success;
+
+    // Use this for initialization
+    void Start () {
         PressedButton = new PressedButton(false, -1);
         _steps = new Dictionary<int, PressedButton>();
         _valueByOrder = new int[4];
-        _valueByOrder[0] = int.Parse(FirstButton.GetComponent<TextMesh>().text);
-        _valueByOrder[1] = int.Parse(SecondButton.GetComponent<TextMesh>().text);
-        _valueByOrder[2] = int.Parse(ThirdButton.GetComponent<TextMesh>().text);
-        _valueByOrder[3] = int.Parse(FourthButton.GetComponent<TextMesh>().text);
+        _valueByOrder[0] = int.Parse(FirstButton.GetComponentInChildren<TextMesh>().text);
+        _valueByOrder[1] = int.Parse(SecondButton.GetComponentInChildren<TextMesh>().text);
+        _valueByOrder[2] = int.Parse(ThirdButton.GetComponentInChildren<TextMesh>().text);
+        _valueByOrder[3] = int.Parse(FourthButton.GetComponentInChildren<TextMesh>().text);
         for(var i = 0; i < _valueByOrder.Length; i++)
         {
             Debug.Log(_valueByOrder[i]);
         }
         _currentStep = 1;
-        _screenDisplay = Random.Range(1, 5);
-        _screenMesh = Screen.GetComponent<TextMesh>();
+        _screenDisplay = UnityEngine.Random.Range(1, 5);
+        _screenMesh = Screen.GetComponentInChildren<TextMesh>();
         _screenMesh.text = _screenDisplay.ToString();
 
-        _stageMesh = Stage.GetComponent<TextMesh>();
+        _stageMesh = Stage.GetComponentInChildren<TextMesh>();
         _stageMesh.text = "1";
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    void Update()
+    {
         if (_currentStep < 6)
         {
-            Debug.Log("Trebuie apasat " + ComputeSteps());
+            //Debug.Log("Trebuie apasat " + ComputeSteps());
             if (PressedButton.NewMessage)
             {
                 if (PressedButton.Label == ComputeSteps())
@@ -58,20 +64,23 @@ public class ScreenBox : MonoBehaviour {
                 {
                     _currentStep = 1;
                     _steps.Clear();
+                    GameManager.Get().strike();
                 }
 
-                _screenDisplay = Random.Range(1, 5);
+                _screenDisplay = UnityEngine.Random.Range(1, 5);
                 _screenMesh.text = _screenDisplay.ToString();
                 PressedButton.NewMessage = false;
                 _stageMesh.text = _currentStep.ToString();
             }
 
         }
-        //else if(_currentStep == 6)
-        //{
-        //    Debug.Log("Screen Solved");
-        //    _currentStep++;
-        //}
+        else if (_currentStep == 6)
+        {
+            Debug.Log("Screen Solved");
+            screen_solved.GetComponent<Renderer>().material = status_success;
+            GameManager.Get().finishedModule();
+            _currentStep++;
+        }
     }
 
     public int ComputeSteps()

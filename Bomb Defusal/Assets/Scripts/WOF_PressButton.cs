@@ -9,6 +9,8 @@ public class WOF_PressButton : InteractibleElementScript
     public Material status_success;
     public GameObject whosOnFirst_solved;
     private Renderer rend;
+    public AudioSource highlightButtonAudioSource;
+    public AudioSource pressButtonAudioSource;
 
     // Use this for initialization
     void Start () {
@@ -23,6 +25,7 @@ public class WOF_PressButton : InteractibleElementScript
         materials.Add(outlineFillMaterial);
 
         rend.materials = materials.ToArray();
+        highlightButtonAudioSource.Play();
     }
 
     public override void unhighlightObject()
@@ -37,6 +40,7 @@ public class WOF_PressButton : InteractibleElementScript
 
     public override void interactWithElement()
     {
+        pressButtonAudioSource.Play();
         if (!WhosOnFirst.gameSolved)
         {
             //if (Input.GetMouseButtonDown(0))
@@ -44,6 +48,7 @@ public class WOF_PressButton : InteractibleElementScript
             if (transform.gameObject.tag == ("button_" + WhosOnFirst.solvedModule_buttonIndex))
             {
                 whosOnFirst_solved.GetComponent<Renderer>().material = status_success;
+                GameManager.Get().finishedModule();
                 Debug.Log("Done");
                 WhosOnFirst.gameSolved = true;
             }

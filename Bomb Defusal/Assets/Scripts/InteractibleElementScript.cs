@@ -53,7 +53,6 @@ public abstract class InteractibleElementScript : MonoBehaviour {
 
     void OnDestroy()
     {
-
         // Destroy material instances
         Destroy(outlineMaskMaterial);
         Destroy(outlineFillMaterial);

@@ -733,7 +733,7 @@ public class WhosOnFirst : MonoBehaviour {
         GenerateRandomScreen();
         GetCorrectWord();
 
-        Debug.Log(solvedModule_buttonIndex);
+        //Debug.Log(solvedModule_buttonIndex);
 
         button_0.GetComponent<Button>().onClick.AddListener(TaskOnClick);
     }

@@ -7,6 +7,8 @@ public class ChessModuleScript : MonoBehaviour {
     public List<int> solution = new List<int>();
     private bool left = false, right = false, up = false, down = false;
     private int currentPosition;
+    public GameObject chess_solved;
+    public Material status_success;
 
     // Use this for initialization
     void Start() {
@@ -140,6 +142,8 @@ public class ChessModuleScript : MonoBehaviour {
             if (currentPosition == solution.Count)
             {
                 Debug.Log("Solved");
+                chess_solved.GetComponent<Renderer>().material = status_success;
+                GameManager.Get().finishedModule();
             }
             return true;
         } else

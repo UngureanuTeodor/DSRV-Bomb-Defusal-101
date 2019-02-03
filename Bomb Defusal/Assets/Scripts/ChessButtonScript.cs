@@ -7,6 +7,8 @@ public class ChessButtonScript : InteractibleElementScript {
 
     private GameObject parent;
     private Renderer rend;
+    public AudioSource highlightButtonAudioSource;
+    public AudioSource pressButtonAudioSource;
 
     // Use this for initialization
     void Start () {
@@ -24,6 +26,7 @@ public class ChessButtonScript : InteractibleElementScript {
         materials.Add(outlineFillMaterial);
 
         rend.materials = materials.ToArray();
+        highlightButtonAudioSource.Play();
     }
 
     public override void unhighlightObject()
@@ -39,6 +42,7 @@ public class ChessButtonScript : InteractibleElementScript {
     public override void interactWithElement()
     {
         bool result = parent.GetComponent<ChessModuleScript>().OnButtonClicked(gameObject.transform.name);
+        pressButtonAudioSource.Play();
         if (result)
         {
             rend.material.shader = Shader.Find("_Color");

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour {
 
@@ -11,7 +12,15 @@ public class GameManager : MonoBehaviour {
     private bool alive = true;
     public GameObject bomb, serialPlaceholder;
     public GameObject controllerLeft, controllerRight;
+    public GameObject manual;
     private int bombSelectedByController = -1;
+
+    public GameObject explosion;
+    public Transform explosionPoint;
+
+    public AudioSource explosionAudioSource;
+    public AudioSource strikeAudioSource;
+    public AudioSource moduleSuccessAudioSource;
 
     public static GameManager Get()
     {
@@ -40,7 +49,7 @@ public class GameManager : MonoBehaviour {
         {
             serialPlaceholder = GameObject.Find("serialPlaceholder");
         }
-	}
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -56,6 +65,10 @@ public class GameManager : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 alive = true;
+                // explosion.Stop();
+                explosionAudioSource.Stop();
+                Destroy(explosion);
+
                 Scene scene = SceneManager.GetActiveScene();
                 SceneManager.LoadScene(scene.name);
             }
@@ -67,6 +80,9 @@ public class GameManager : MonoBehaviour {
         GameObject messageUI = GameObject.Find("Message");
         messageUI.GetComponent<Text>().text = message;
         alive = false;
+
+        explosionAudioSource.Play();
+        GameObject instantiated = Instantiate(explosion, explosionPoint.position, Quaternion.identity);
     }
 
     public int getBatteriesNo()
@@ -81,10 +97,14 @@ public class GameManager : MonoBehaviour {
 
     public void strike()
     {
-        strikesLeft--;
-        GameObject strikesUI = GameObject.Find("Strikes");
-        string existingText = strikesUI.GetComponent<Text>().text;
-        strikesUI.GetComponent<Text>().text = existingText + "  X";
+        if (strikesLeft > 0)
+        {
+            strikesLeft--;
+            GameObject strikesUI = GameObject.Find("Strikes");
+            string existingText = strikesUI.GetComponent<Text>().text;
+            strikesUI.GetComponent<Text>().text = existingText + "  X";
+            strikeAudioSource.Play();
+        }
     }
 
     public void selectBomb(int controllerIndex)
@@ -106,5 +126,10 @@ public class GameManager : MonoBehaviour {
         bomb.GetComponent<BoxCollider>().enabled = true;
         controllerRight.GetComponent<ControllerTriggerAction>().setHasLaser(false);
         controllerLeft.GetComponent<ControllerTriggerAction>().setHasLaser(false);
+    }
+
+    public void finishedModule()
+    {
+        moduleSuccessAudioSource.Play();
     }
 }

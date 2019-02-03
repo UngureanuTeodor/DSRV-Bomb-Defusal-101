@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -167,14 +168,44 @@ public class ControllerTriggerAction : MonoBehaviour {
                         {
                             hit.transform.gameObject.GetComponent<WOF_PressButton>().highlightObject();
                         }
+                        if (hit.transform.gameObject.GetComponent<WireObj>())
+                        {
+                            hit.transform.gameObject.GetComponent<WireObj>().highlightObject();
+                        }
+                        if (hit.transform.gameObject.GetComponent<ScreenBoxButton>())
+                        {
+                            hit.transform.gameObject.GetComponent<ScreenBoxButton>().highlightObject();
+                        }
+                        if (hit.collider.transform.parent.gameObject.GetComponent<Book>())
+                        {
+                            hit.collider.transform.parent.gameObject.GetComponent<Book>().selectedPage = hit.transform.name;
+                            hit.collider.transform.parent.gameObject.GetComponent<Book>().highlightObject();
+                        }
                     }
-                    lastHighlighted = hit.transform.gameObject;
+                    if (hit.collider.transform.parent.gameObject.GetComponent<Book>())
+                    {
+                        lastHighlighted = hit.collider.transform.parent.gameObject;
+                    }
+                    else
+                    {
+                        lastHighlighted = hit.transform.gameObject;
+                    }
                     //Debug.Log(hit.transform.name);
+                } else
+                {
+                    if (lastHighlighted != null)
+                    {
+                        lastHighlighted.GetComponent<InteractibleElementScript>().unhighlightObject();
+                        lastHighlighted = null;
+                    }
                 }
             }
             if (Controller.GetHairTriggerUp())
             {
-                lastHighlighted.GetComponent<InteractibleElementScript>().interactWithElement();
+                if (lastHighlighted != null)
+                {
+                    lastHighlighted.GetComponent<InteractibleElementScript>().interactWithElement();;
+                }
                 laser.SetActive(false);
             }
         }
