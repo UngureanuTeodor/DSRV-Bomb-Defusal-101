@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TimerScript : MonoBehaviour {
 
-    private float elapsedTime = 600;
+    public float elapsedTime = 600;
     public TextMesh textMesh;
     private int lastSeconds = -1;
     public AudioSource timerAudioSource;
